@@ -2,10 +2,13 @@ const input = document.querySelector("input");
 const addButton = document.querySelector("#next");
 const ul = document.querySelector("ul");
 const li = document.querySelectorAll("li");
+
 let datas = [];
+
 let id = 0;
 
 function addTodo() {
+
     ++id;
     const inputValue = input.value;
     if (inputValue.trim()) {
@@ -15,9 +18,36 @@ function addTodo() {
             text: inputValue,
             completed: false
         };
-        datas.push(todoModel);
+
+        if (!localStorage.getItem('datas')) {
+
+
+            datas.push(todoModel);
+
+            localStorage.setItem('datas', JSON.stringify(datas));
+
+
+
+
+
+        } else {
+            console.log(typeof datas);
+            datas = JSON.parse(localStorage.getItem('datas'));
+            console.log(typeof datas);
+
+            /* datas.push(todoModel);*/
+            console.log(datas);
+
+
+            localStorage.setItem('datas', JSON.stringify(datas))
+
+
+        }
+
+
         input.value = '';
         renderAllTodo();
+
 
 
 
@@ -39,26 +69,34 @@ const todotemplate = function(todo) {
 
 
 function renderAllTodo() {
+
     let newtodolist = '';
+    /*if (localStorage.getItem('datas')) {
+        datas = JSON.parse(localStorage.getItem('datas'));*/
     for (let i = 0; i < datas.length; i++) {
         newtodolist += todotemplate(datas[i]);
-
     }
+
     ul.innerHTML = newtodolist;
-
-
 }
 
+/*}*/
+
+
+
 function deleteTodo(id) {
+
     // [1,2,3,4,5,6,7,8]
     // datas = datas.filter((el) => el.id != id);
     const newDatas = [];
+
     for (let i = 0; i < datas.length; i++) {
         if (datas[i].id !== id) {
             newDatas.push(datas[i])
         }
     }
     datas = newDatas;
+    console.log(datas);
     renderAllTodo();
 }
 
@@ -75,3 +113,4 @@ function completeTask(id) {
 
     renderAllTodo();
 }
+renderAllTodo();
